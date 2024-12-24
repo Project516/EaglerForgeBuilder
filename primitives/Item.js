@@ -8,26 +8,59 @@ PRIMITIVES["item"] = {
         texture: VALUE_ENUMS.IMG,
         firstPersonScale: 1.7,
         thirdPersonScale: 0.55,
+        useDurationTicks: 32,
+        useItemOnRightClick: true,
+        itemUseAnimation: ["NONE", "EAT", "DRINK", "BLOCK", "BOW"],
         Constructor: VALUE_ENUMS.ABSTRACT_HANDLER + "ItemConstructor",
         RightClick: VALUE_ENUMS.ABSTRACT_HANDLER + "ItemRightClick",
+        Used: VALUE_ENUMS.ABSTRACT_HANDLER + "ItemUsed",
+        Tick: VALUE_ENUMS.ABSTRACT_HANDLER + "ItemTicked",
+        UsedOnBlock: VALUE_ENUMS.ABSTRACT_HANDLER + "ItemBlockUse",
     },
     asJavaScript: function () {
         var constructorHandler = getHandlerCode("ItemConstructor", this.tags.Constructor, []);
         var rightClickHandler = getHandlerCode("ItemRightClick", this.tags.RightClick, ["$$itemstack", "$$world", "$$player"]);
+        var usedHandler = getHandlerCode("ItemUsed", this.tags.Used, ["$$itemstack", "$$world", "$$player"]);
+        var tickedHandler = getHandlerCode("ItemTicked", this.tags.Tick, ["$$itemstack", "$$world", "$$player", "$$hotbar_slot", "$$is_held"]);
+        var blockUseHandler = getHandlerCode("ItemBlockUse", this.tags.UsedOnBlock, ["$$itemstack", "$$player","$$world", "$$blockpos"]);
         return `(function ItemDatablock() {
     const $$itemTexture = "${this.tags.texture}";
 
     function $$ServersideItem() {
         var $$itemClass = ModAPI.reflect.getClassById("net.minecraft.item.Item");
         var $$itemSuper = ModAPI.reflect.getSuper($$itemClass, (x) => x.length === 1);
+        var $$itemUseAnimation = ModAPI.reflect.getClassById("net.minecraft.item.EnumAction").staticVariables["${this.tags.itemUseAnimation}"];
+        console.log($$itemUseAnimation);
         function $$CustomItem() {
             $$itemSuper(this);
             ${constructorHandler.code};
         }
         ModAPI.reflect.prototypeStack($$itemClass, $$CustomItem);
         $$CustomItem.prototype.$onItemRightClick = function (${rightClickHandler.args.join(", ")}) {
+            ${this.tags.useItemOnRightClick?
+                `(${rightClickHandler.args[2]}).$setItemInUse(${rightClickHandler.args[0]},${this.tags.useDurationTicks});`
+            :""}
             ${rightClickHandler.code};
             return (${rightClickHandler.args[0]});
+        }
+        $$CustomItem.prototype.$getMaxItemUseDuration = function () {
+            return ${this.tags.useDurationTicks};
+        }
+        $$CustomItem.prototype.$getItemUseAction = function () {
+            return $$itemUseAnimation;
+        }
+        $$CustomItem.prototype.$onItemUseFinish = function (${usedHandler.args.join(", ")}) {
+            ${usedHandler.code};
+            return (${usedHandler.args[0]});
+        }
+        $$CustomItem.prototype.$onUpdate = function (${tickedHandler.args.join(", ")}) {
+            ${tickedHandler.args[4]} = (${tickedHandler.args[4]}) ? true : false;
+            ${tickedHandler.code};
+            return (${tickedHandler.args[0]});
+        }
+        $$CustomItem.prototype.$onItemUse0 = function (${blockUseHandler.args.join(", ")}) {
+            ${blockUseHandler.code};
+            return 0;
         }
         function $$internal_reg() {
             var $$custom_item = (new $$CustomItem()).$setUnlocalizedName(

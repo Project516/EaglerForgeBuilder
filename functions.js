@@ -6,7 +6,6 @@ const codeGrabberRegex = /(?<=function \(\) {)[\s\S]+(?=}$)/gm; //regex to get t
 const FUNCTIONS = {};
 
 FUNCTIONS["fixup_block_ids"] = {
-    identifier: "fixup_block_ids",
     //Very important that there is no name and a whitespace before and after the parantheses
     code: function () {
         function EFB2__defineFixupGlobal() {
@@ -32,7 +31,6 @@ FUNCTIONS["fixup_block_ids"] = {
 };
 
 FUNCTIONS["execute_command"] = {
-    identifier: "execute_command",
     //Very important that there is no name and a whitespace before and after the parantheses
     code: function () {
         function EFB2__defineExecCmdGlobal() {
@@ -45,19 +43,19 @@ FUNCTIONS["execute_command"] = {
                 }
                 ModAPI.reflect.prototypeStack(ModAPI.reflect.getClassByName("CommandBlockLogic"), x);
                 var vector = ModAPI.reflect.getClassByName("Vec3").constructors[0]($blockpos.$x + 0.5, $blockpos.$y + 0.5, $blockpos.$z + 0.5);
-                x.prototype.$getEntityWorld = ()=>{return $world};
-                x.prototype.$getCommandSenderEntity = ()=>{return null};
-                x.prototype.$updateCommand = ()=>{};
-                x.prototype.$addChatMessage = (e)=>{console.log(e)};
-                x.prototype.$func_145757_a = ()=>{};
-                x.prototype.$getPosition = ()=>{return $blockpos};
-                x.prototype.$getPosition0 = ()=>{return $blockpos};
-                x.prototype.$getPositionVector = ()=>{return vector};
-                x.prototype.$func_145751_f = ()=>{return 0};
-                x.prototype.$sendCommandFeedback = ()=>{return feedback ? 1 : 0}
+                x.prototype.$getEntityWorld = () => { return $world };
+                x.prototype.$getCommandSenderEntity = () => { return null };
+                x.prototype.$updateCommand = () => { };
+                x.prototype.$addChatMessage = (e) => { console.log(e) };
+                x.prototype.$func_145757_a = () => { };
+                x.prototype.$getPosition = () => { return $blockpos };
+                x.prototype.$getPosition0 = () => { return $blockpos };
+                x.prototype.$getPositionVector = () => { return vector };
+                x.prototype.$func_145751_f = () => { return 0 };
+                x.prototype.$sendCommandFeedback = () => { return feedback ? 1 : 0 }
                 var cmd = new x();
                 cmd.$setCommand(ModAPI.util.str(commandStr));
-                
+
                 try {
                     cmd.$trigger($world);
                 } catch (error) {
@@ -70,12 +68,43 @@ FUNCTIONS["execute_command"] = {
     },
 };
 
+FUNCTIONS["execute_command_as"] = {
+    //Very important that there is no name and a whitespace before and after the parantheses
+    code: function () {
+        function EFB2__defineExecCmdAsGlobal() {
+            var getServer = ModAPI.reflect.getClassById("net.minecraft.server.MinecraftServer").staticMethods.getServer.method;
+            globalThis.efb2__executeCommandAs = function efb2__executeCommandAs($commandsender, command, feedback) {
+                var server = getServer();
+                if (!server) { return };
+                var commandManager = server.$commandManager;
+
+                //lie a bit
+                var x = $commandsender.$canCommandSenderUseCommand;
+                $commandsender.$canCommandSenderUseCommand = () => 1;
+
+                var y = $commandsender.$sendCommandFeedback;
+                $commandsender.$sendCommandFeedback = feedback ? () => 1 : () => 0;
+
+                try {
+                    commandManager.$executeCommand($commandsender, ModAPI.util.str(command));
+                } catch (error) {
+                    console.error(error);
+                }
+
+                $commandsender.$canCommandSenderUseCommand = x;
+                $commandsender.$sendCommandFeedback = y;
+            }
+        }
+        ModAPI.dedicatedServer.appendCode(EFB2__defineExecCmdAsGlobal);
+        EFB2__defineExecCmdAsGlobal();
+    },
+};
+
 FUNCTIONS["construct_vec3"] = {
-    identifier: "construct_vec3",
     //Very important that there is no name and a whitespace before and after the parantheses
     code: function () {
         function EFB2__defineMakeVec3() {
-            var mkVec3 = ModAPI.reflect.getClassById("net.minecraft.util.Vec3").constructors.find(x=>x.length===3);
+            var mkVec3 = ModAPI.reflect.getClassById("net.minecraft.util.Vec3").constructors.find(x => x.length === 3);
             globalThis.efb2__makeVec3 = function efb2__makeVec3(x, y, z) {
                 return mkVec3(x, y, z);
             }
@@ -86,11 +115,10 @@ FUNCTIONS["construct_vec3"] = {
 };
 
 FUNCTIONS["construct_blockpos"] = {
-    identifier: "construct_blockpos",
     //Very important that there is no name and a whitespace before and after the parantheses
     code: function () {
         function EFB2__defineMakeBlockPos() {
-            var mkBlockPos = ModAPI.reflect.getClassById("net.minecraft.util.BlockPos").constructors.find(x=>x.length===3);
+            var mkBlockPos = ModAPI.reflect.getClassById("net.minecraft.util.BlockPos").constructors.find(x => x.length === 3);
             globalThis.efb2__makeBlockPos = function efb2__makeBlockPos(x, y, z) {
                 return mkBlockPos(x, y, z);
             }
@@ -100,7 +128,21 @@ FUNCTIONS["construct_blockpos"] = {
     },
 };
 
+FUNCTIONS["message_command_sender"] = {
+    //Very important that there is no name and a whitespace before and after the parantheses
+    code: function () {
+        function EFB2__defineMessageCommandSender() {
+            var chatComponentText = ModAPI.reflect.getClassById("net.minecraft.util.ChatComponentText").constructors[0];
+            globalThis.efb2__messageCommandSender = function efb2__messageCommandSender(cmdSender, str) {
+                return cmdSender.$addChatMessage(chatComponentText(ModAPI.util.str(str)));
+            }
+        }
+        ModAPI.dedicatedServer.appendCode(EFB2__defineMessageCommandSender);
+        EFB2__defineMessageCommandSender();
+    },
+};
+
 function getFunctionCode(fn) {
-    return fn.code.toString().match(codeGrabberRegex)?.[0] 
-    || (()=>{console.error("Malformed function: ", fn); return "";})();
+    return fn.code.toString().match(codeGrabberRegex)?.[0]
+        || (() => { console.error("Malformed function: ", fn); return ""; })();
 }

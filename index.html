@@ -45,6 +45,7 @@
           <field name="BOOL">TRUE</field>
         </block>
         <block type="logic_null"></block>
+        <block type="logic_a_or_b"></block>
         <block type="logic_ternary"></block>
       </category>
       <category name="Loops" colour="#5ba55b">
@@ -388,6 +389,7 @@
         <block type="handle_ItemUsed"> </block>
         <block type="handle_ItemTicked"> </block>
         <block type="handle_ItemBlockUse"> </block>
+        <block type="handle_ItemCrafted"> </block>
       </category>
       <category name="Items (C)" colour="#0033dd">
         <block type="items_creativetab"> </block>
@@ -414,6 +416,7 @@
         <block type="world_is_not_remote"> </block>
         <block type="world_explosion"> </block>
         <block type="world_command"> </block>
+        <block type="world_execute_command_as_entity"> </block>
         <block type="world_get_loaded_entities"> </block>
         <block type="world_get_player_entities"> </block>
       </category>
@@ -431,7 +434,17 @@
         <block type="entity_get_lookvec"> </block>
         <block type="entity_get_eye_pos"> </block>
         <block type="entity_raytrace"> </block>
-        <block type="entity_setdead"> </block>
+      </category>
+      <category name="Command (H)" colour="#ed120e">
+        <block type="handle_CommandCalledByPlayer"> </block>
+        <block type="handle_CommandCalled"> </block>
+      </category>
+      <category name="Command (C)" colour="#ed120e">
+        <block type="command_sendmessage"> </block>
+        <block type="command_get_position"> </block>
+        <block type="command_get_world"> </block>
+        <block type="command_get_entity"> </block>
+        <block type="command_get_name"> </block>
       </category>
     </xml>
   </head>
@@ -487,9 +500,11 @@
     </table>
     <!-- Blockly block libmap builder -->
     <script src="block_libmap.js"></script>
+    <script src="libs/upatch.js"></script>
 
     <!-- Additional blocks -->
     <script src="blocks/World.js"></script>
+    <script src="blocks/Commands.js"></script>
     <script src="blocks/ItemStack.js"></script>
     <script src="blocks/Blocks.js"></script>
     <script src="blocks/Items.js"></script>
@@ -498,6 +513,7 @@
     <script src="blocks/BlockPos.js"></script>
     <script src="blocks/Events.js"></script> <!-- Currently unused -->
     <script src="blocks/ReturnBlock.js"></script>
+    <script src="blocks/Utils.js"></script>
 
     <!-- The datablock types -->
     <script src="types.js"></script>
@@ -507,6 +523,7 @@
     <script src="primitives/Icon.js"></script>
     <script src="primitives/AdvancedBlock.js"></script>
     <script src="primitives/Item.js"></script>
+    <script src="primitives/Command.js"></script>
 
     <!-- Web App GUI and Engine -->
     <script src="functions.js"></script>

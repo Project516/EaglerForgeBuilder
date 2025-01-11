@@ -400,6 +400,7 @@
         <block type="itemstack_setstacksize"> </block>
         <block type="itemstack_displayname"> </block>
         <block type="itemstack_setdisplayname"> </block>
+        <sep gap="40"></sep>
         <block type="itemstack_enchant"> </block>
         <block type="itemstack_repaircost"> </block>
         <block type="itemstack_setrepaircost"> </block>
@@ -425,8 +426,10 @@
         <block type="entity_set_position_xyz"> </block>
         <block type="entity_get_prop"> </block>
         <block type="entity_set_prop"> </block>
+        <sep gap="40"></sep>
         <block type="entity_get_switch"> </block>
         <block type="entity_set_switch"> </block>
+        <sep gap="40"></sep>
         <block type="entity_get_world"> </block>
         <block type="entity_get_position"> </block>
         <block type="entity_distance"> </block>
@@ -445,6 +448,9 @@
         <block type="command_get_world"> </block>
         <block type="command_get_entity"> </block>
         <block type="command_get_name"> </block>
+      </category>
+      <category name="Crafting Recipe (H)" colour="#8c5e4d">
+        <block type="handle_CraftingRecipeModifyResult"> </block>
       </category>
     </xml>
   </head>
@@ -501,10 +507,12 @@
     <!-- Blockly block libmap builder -->
     <script src="block_libmap.js"></script>
     <script src="libs/upatch.js"></script>
+    <script src="item_selector.js"></script>
 
     <!-- Additional blocks -->
     <script src="blocks/World.js"></script>
     <script src="blocks/Commands.js"></script>
+    <script src="blocks/CraftingRecipe.js"></script>
     <script src="blocks/ItemStack.js"></script>
     <script src="blocks/Blocks.js"></script>
     <script src="blocks/Items.js"></script>
@@ -525,6 +533,7 @@
     <script src="primitives/AdvancedBlock.js"></script>
     <script src="primitives/Item.js"></script>
     <script src="primitives/Command.js"></script>
+    <script src="primitives/CraftingRecipe.js"></script>
 
     <!-- Web App GUI and Engine -->
     <script src="functions.js"></script>

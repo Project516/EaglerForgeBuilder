@@ -6,7 +6,7 @@ const itemstack_stacksize = {
         this.setInputsInline(true)
         this.setOutput(true, 'Number');
         this.setTooltip('Gets the stacksize of an ItemStack');
-        this.setHelpUrl('');
+        this.setHelpUrl('https://nurmarvin.github.io/Minecraft-1.8-JavaDocs/net/minecraft/item/ItemStack.html');
         this.setColour(165);
     }
 };
@@ -33,7 +33,7 @@ const itemstack_setstacksize = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('Sets the stacksize of an ItemStack');
-        this.setHelpUrl('');
+        this.setHelpUrl('https://nurmarvin.github.io/Minecraft-1.8-JavaDocs/net/minecraft/item/ItemStack.html');
         this.setColour(165);
     }
 };
@@ -42,7 +42,7 @@ Blockly.common.defineBlocks({ itemstack_setstacksize: itemstack_setstacksize });
 javascript.javascriptGenerator.forBlock['itemstack_setstacksize'] = function () {
     const value_itemstack = javascript.javascriptGenerator.valueToCode(this, 'ITEMSTACK', javascript.Order.ATOMIC);
     const value_value = javascript.javascriptGenerator.valueToCode(this, 'VALUE', javascript.Order.ATOMIC);
-    const code = `(${value_itemstack}).$stackSize = (${value_value})`;
+    const code = `(${value_itemstack}).$stackSize = (${value_value});`;
     return code;
 }
 
@@ -55,7 +55,7 @@ const itemstack_displayname = {
         this.setInputsInline(true)
         this.setOutput(true, 'String');
         this.setTooltip('Gets the display name of an ItemStack');
-        this.setHelpUrl('');
+        this.setHelpUrl('https://nurmarvin.github.io/Minecraft-1.8-JavaDocs/net/minecraft/item/ItemStack.html');
         this.setColour(165);
     }
 };
@@ -75,13 +75,13 @@ const itemstack_setdisplayname = {
             .appendField('set itemstack display name');
         this.appendValueInput('VALUE')
             .setAlign(Blockly.inputs.Align.RIGHT)
-            .setCheck('Number')
+            .setCheck('String')
             .appendField('to');
         this.setInputsInline(true)
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('Sets the display name of an ItemStack');
-        this.setHelpUrl('');
+        this.setHelpUrl('https://nurmarvin.github.io/Minecraft-1.8-JavaDocs/net/minecraft/item/ItemStack.html');
         this.setColour(165);
     }
 };
@@ -90,7 +90,7 @@ Blockly.common.defineBlocks({ itemstack_setdisplayname: itemstack_setdisplayname
 javascript.javascriptGenerator.forBlock['itemstack_setdisplayname'] = function () {
     const value_itemstack = javascript.javascriptGenerator.valueToCode(this, 'ITEMSTACK', javascript.Order.ATOMIC);
     const value_value = javascript.javascriptGenerator.valueToCode(this, 'VALUE', javascript.Order.ATOMIC);
-    const code = `(${value_itemstack}).$setStackDisplayName(ModAPI.util.str(${value_value}))`;
+    const code = `(${value_itemstack}).$setStackDisplayName(ModAPI.util.str(${value_value}));`;
     return code;
 }
 
@@ -138,7 +138,7 @@ const itemstack_enchant = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('Adds an enchantment to an ItemStack');
-        this.setHelpUrl('');
+        this.setHelpUrl('https://nurmarvin.github.io/Minecraft-1.8-JavaDocs/net/minecraft/item/ItemStack.html');
         this.setColour(165);
     }
 };
@@ -148,7 +148,7 @@ javascript.javascriptGenerator.forBlock['itemstack_enchant'] = function () {
     const value_itemstack = javascript.javascriptGenerator.valueToCode(this, 'ITEMSTACK', javascript.Order.ATOMIC);
     const dropdown_enchantment = this.getFieldValue('ENCHANTMENT');
     const value_level = javascript.javascriptGenerator.valueToCode(this, 'LEVEL', javascript.Order.ATOMIC);
-    const code = `(${value_itemstack}).$addEnchantment(ModAPI.enchantments["${dropdown_enchantment}"], (${value_level}))`;
+    const code = `(${value_itemstack}).$addEnchantment(ModAPI.enchantments["${dropdown_enchantment}"].getRef(), (${value_level}));`;
     return code;
 }
 
@@ -162,7 +162,7 @@ const itemstack_repaircost = {
         this.setInputsInline(true)
         this.setOutput(true, 'Number');
         this.setTooltip('Gets the repair cost of an ItemStack');
-        this.setHelpUrl('');
+        this.setHelpUrl('https://nurmarvin.github.io/Minecraft-1.8-JavaDocs/net/minecraft/item/ItemStack.html');
         this.setColour(165);
     }
 };
@@ -189,7 +189,7 @@ const itemstack_setrepaircost = {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setTooltip('Sets the repair cost of an ItemStack');
-        this.setHelpUrl('');
+        this.setHelpUrl('https://nurmarvin.github.io/Minecraft-1.8-JavaDocs/net/minecraft/item/ItemStack.html');
         this.setColour(165);
     }
 };
@@ -198,6 +198,6 @@ Blockly.common.defineBlocks({ itemstack_setrepaircost: itemstack_setrepaircost }
 javascript.javascriptGenerator.forBlock['itemstack_setrepaircost'] = function () {
     const value_itemstack = javascript.javascriptGenerator.valueToCode(this, 'ITEMSTACK', javascript.Order.ATOMIC);
     const value_value = javascript.javascriptGenerator.valueToCode(this, 'VALUE', javascript.Order.ATOMIC);
-    const code = `(${value_itemstack}).$setRepairCost(${value_value})`;
+    const code = `(${value_itemstack}).$setRepairCost(${value_value});`;
     return code;
 }

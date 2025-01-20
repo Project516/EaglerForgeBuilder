@@ -158,7 +158,7 @@ FUNCTIONS["java_logger"] = {
                 logger.$warn(ModAPI.util.str(log));
             }
             globalThis.efb2__jerr = function efb2__jerr(log) {
-                logger.$error(ModAPI.util.str(log));
+                logger.$error1(ModAPI.util.str(log));
             }
         }
         ModAPI.dedicatedServer.appendCode(EFB2__defineJavaLogger);
@@ -167,6 +167,7 @@ FUNCTIONS["java_logger"] = {
 };
 
 function getFunctionCode(fn) {
+    if (!fn) return "";
     return fn.code.toString().match(codeGrabberRegex)?.[0]
         || (() => { console.error("Malformed function: ", fn); return ""; })();
 }
